@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.03
+ * @version  1.04
  */
 public class GameEngine {
     private static final int ROW1 = 0;
