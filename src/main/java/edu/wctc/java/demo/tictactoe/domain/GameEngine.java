@@ -128,9 +128,8 @@ public class GameEngine {
                         return t;
                     }
                 }
-            } else {
-                count = 0;
             }
+            count = 0;   
         }
         
         // If none found, try to block "X"
@@ -145,11 +144,21 @@ public class GameEngine {
                         return t;
                     }
                 }
-            } else {
-                count = 0;
             }
+            count = 0;
         }
        
+        // If no blocking move, try to find an open corner tile, which
+        // might set up an winning combination
+        if(!tiles[R1C1].isSelected()) {
+            return tiles[R1C1];
+        } else if(!tiles[R3C3].isSelected()) {
+            return tiles[R3C3];
+        } else if(!tiles[R3C1].isSelected()) {
+            return tiles[R3C1];
+        } else if(!tiles[R1C3].isSelected()) {
+            return tiles[R1C3];
+        }
         
         // If none found just pick an empty tile at random
         if(tileName == null) {

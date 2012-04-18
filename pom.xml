@@ -9,6 +9,10 @@
 
   <name>TicTacToeMaven</name>
   <url>http://maven.apache.org</url>
+    <ciManagement>
+        <system>hudson</system>
+        <url>http://bit.glassfish.wctc.edu:8080/job/TicTacToeMaven/</url>
+    </ciManagement>
     <build>
         <plugins>
             <plugin>
