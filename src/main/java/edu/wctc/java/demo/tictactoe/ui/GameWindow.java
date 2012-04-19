@@ -28,7 +28,7 @@ import edu.wctc.java.demo.tictactoe.domain.Tile;
  * Only a new View would be needed.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.03
+ * @version  1.05
  */
 public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private static final String EMPTY_TILE = "";
@@ -154,11 +154,10 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         r3c1 = new Tile();
         r3c2 = new Tile();
         r3c3 = new Tile();
-        jPanel2 = new javax.swing.JPanel();
         statusMsg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.4");
+        setTitle("TicTacToe in Java v1.0.5");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
@@ -253,27 +252,10 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         r3c3.setName("r3c3");
         r3c3.addActionListener(this);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         statusMsg.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         statusMsg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statusMsg.setText("Click a button to start new game");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(statusMsg))
-        );
+        statusMsg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -301,8 +283,8 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                         .addComponent(r1c2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(42, Short.MAX_VALUE))
+            .addComponent(statusMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,13 +305,13 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                     .addComponent(r3c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(r3c2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(r3c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addGap(18, 18, 18)
+                .addComponent(statusMsg)
+                .addGap(4, 4, 4))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-300)/2, (screenSize.height-332)/2, 300, 332);
+        setBounds((screenSize.width-300)/2, (screenSize.height-321)/2, 300, 321);
     }
 
     // Code for dispatching events from components to event handlers.
@@ -434,7 +416,6 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JButton r1c1;
     private javax.swing.JButton r1c2;
     private javax.swing.JButton r1c3;
