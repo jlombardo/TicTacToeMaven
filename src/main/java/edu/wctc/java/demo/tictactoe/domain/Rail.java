@@ -41,7 +41,7 @@ public class Rail {
                 oCount++;
             }
         }
-        return xCount == 2 || oCount == 3 ? true : false;
+        return xCount == 3 || oCount == 3 ? true : false;
         
     }
     
