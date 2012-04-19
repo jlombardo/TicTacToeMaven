@@ -24,6 +24,21 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.3.1</version>
+              <configuration>
+                    <archive>
+                          <manifest>
+                              <addClasspath>true</addClasspath>
+                                <mainClass>edu.wctc.java.demo.tictactoe.app.TicTacToe</mainClass>
+                          </manifest>
+                    </archive>
+                    <finalName>TicTacToe-${project.version}</finalName>
+                    <outputDirectory>target</outputDirectory>
+              </configuration>
+            </plugin>
         </plugins>
     </build>
     <properties>
