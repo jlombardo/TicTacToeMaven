@@ -157,7 +157,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         statusMsg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.5");
+        setTitle("TicTacToe in Java v1.0.6");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));

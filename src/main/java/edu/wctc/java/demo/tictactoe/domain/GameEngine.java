@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.04
+ * @version  1.06
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -147,9 +147,16 @@ public class GameEngine {
             }
             count = 0;
         }
+         
+        // If no blocking move, try to play the center which gives "O"
+        // a statistical advantage
+        if(!tiles[R2C2].isSelected()) {
+            return tiles[R2C2];
+        }
        
-        // If no blocking move, try to find an open corner tile, which
-        // might set up an winning combination
+       
+        // If center move is not available, try to find an open corner tile, 
+        // which might set up an winning combination
         if(!tiles[R1C1].isSelected()) {
             return tiles[R1C1];
         } else if(!tiles[R3C3].isSelected()) {
