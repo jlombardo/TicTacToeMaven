@@ -4,16 +4,18 @@ import edu.wctc.java.demo.tictactoe.ui.GameWindow;
 
 /**
  * The startup class for a classic Tic-Tac-Toe game.
- * 
+ *
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.01
+ * @version  1.07
  */
 public class TicTacToe {
+    
+    private TicTacToe() {}
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         /*
          * Set the Nimbus look and feel
          */

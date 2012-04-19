@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.06
+ * @version  1.07
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -53,53 +53,53 @@ public class GameEngine {
      * @param tiles - an array of Tile objects (custom JButton objects) 
      * representing each square space (9 total) on the game board.
      */
-    public GameEngine(Tile[] tiles) {
+    public GameEngine(final Tile[] tiles) {
         this.tiles = tiles;
         tilesPlayed = 0;
         initRails();
     }
     
     // Determines tile combinations that form winning rails.
-    private void initRails() {
+    private final void initRails() {
         rails = new Rail[8];
         rails[ROW1] = new Rail(
             new Tile[] {
-                tiles[R1C1],tiles[R1C2],tiles[R1C3]
+                tiles[R1C1], tiles[R1C2], tiles[R1C3]
             }
         );
         rails[ROW2] = new Rail(
             new Tile[] {
-                tiles[R2C1],tiles[R2C2],tiles[R2C3]
+                tiles[R2C1], tiles[R2C2], tiles[R2C3]
             }
         );
         rails[ROW3] = new Rail(
             new Tile[] {
-                tiles[R3C1],tiles[R3C2],tiles[R3C3]
+                tiles[R3C1], tiles[R3C2], tiles[R3C3]
             }
         );
         rails[COL1] = new Rail(
             new Tile[] {
-                tiles[R1C1],tiles[R2C1],tiles[R3C1]
+                tiles[R1C1], tiles[R2C1], tiles[R3C1]
             }
         );
         rails[COL2] = new Rail(
             new Tile[] {
-                tiles[R1C2],tiles[R2C2],tiles[R3C2]
+                tiles[R1C2], tiles[R2C2], tiles[R3C2]
             }
         );
         rails[COL3] = new Rail(
             new Tile[] {
-                tiles[R1C3],tiles[R2C3],tiles[R3C3]
+                tiles[R1C3], tiles[R2C3], tiles[R3C3]
             }
         );
         rails[DIAGL] = new Rail(
             new Tile[] {
-                tiles[R1C1],tiles[R2C2],tiles[R3C3]
+                tiles[R1C1], tiles[R2C2], tiles[R3C3]
             }
         );
         rails[DIAGR] = new Rail(
             new Tile[] {
-                tiles[R1C3],tiles[R2C2],tiles[R3C1]
+                tiles[R1C3], tiles[R2C2], tiles[R3C1]
             }
         );
     }
@@ -110,20 +110,20 @@ public class GameEngine {
      * opportunity by the player "X", and if that is not available, just
      * finds a random, empty tile.
      */
-    public Tile selectComputerMove() {
+    public final Tile selectComputerMove() {
         Tile tile = null;
         int count = 0;
         String tileName = null;
         boolean continueLoop = true;
         
         // First try to find a winning move
-        for(Rail rail : rails) {
-            for(Tile t : rail.getTiles()) {
-                if(t.getText().equals("0")) count++;
+        for (Rail rail : rails) {
+            for (Tile t : rail.getTiles()) {
+                if (t.getText().equals("0")) count++;
             }
-            if(count == 2) {
-                for(Tile t : rail.getTiles()) {
-                    if(t.getText().equals("")) {
+            if (count == 2) {
+                for (Tile t : rail.getTiles()) {
+                    if (t.getText().equals("")) {
                         tileName = t.getName();
                         return t;
                     }
@@ -133,13 +133,13 @@ public class GameEngine {
         }
         
         // If none found, try to block "X"
-         for(Rail rail : rails) {
-            for(Tile t : rail.getTiles()) {
-                if(t.getText().equals("X")) count++;
+         for (Rail rail : rails) {
+            for (Tile t : rail.getTiles()) {
+                if (t.getText().equals("X")) count++;
             }
-            if(count == 2) {
-                for(Tile t : rail.getTiles()) {
-                    if(t.getText().equals("")) {
+            if (count == 2) {
+                for (Tile t : rail.getTiles()) {
+                    if (t.getText().equals("")) {
                         tileName = t.getName();
                         return t;
                     }
@@ -150,20 +150,20 @@ public class GameEngine {
          
         // If no blocking move, try to play the center which gives "O"
         // a statistical advantage
-        if(!tiles[R2C2].isSelected()) {
+        if (!tiles[R2C2].isSelected()) {
             return tiles[R2C2];
         }
        
        
         // If center move is not available, try to find an open corner tile, 
         // which might set up an winning combination
-        if(!tiles[R1C1].isSelected()) {
+        if (!tiles[R1C1].isSelected()) {
             return tiles[R1C1];
-        } else if(!tiles[R3C3].isSelected()) {
+        } else if (!tiles[R3C3].isSelected()) {
             return tiles[R3C3];
-        } else if(!tiles[R3C1].isSelected()) {
+        } else if (!tiles[R3C1].isSelected()) {
             return tiles[R3C1];
-        } else if(!tiles[R1C3].isSelected()) {
+        } else if (!tiles[R1C3].isSelected()) {
             return tiles[R1C3];
         }
         
@@ -172,8 +172,8 @@ public class GameEngine {
             int row = rand.nextInt(3) + 1;
             int col = rand.nextInt(3) + 1;
             tileName = "r" + row + "c" + col;
-            for(Tile btn: tiles) {
-                if(btn.getName().equals(tileName)) {
+            for (Tile btn: tiles) {
+                if (btn.getName().equals(tileName)) {
                     tile = btn;
                     break;
                 }
@@ -184,17 +184,17 @@ public class GameEngine {
     }
     
     // Be sure to call this before checkForWin
-    public boolean checkForDraw() {
+    public final boolean checkForDraw() {
         boolean result = false;
         String player = "";
         
-        for(Rail rail : rails) {
-            if(rail.isWinner()) {
+        for (Rail rail : rails) {
+            if (rail.isWinner()) {
                 return false;
             }
         }
         
-        if(tilesPlayed == 9) {
+        if (tilesPlayed == 9) {
             draws++;
 //            window.getStatusMsg().setText(DRAW_MSG);  
             result = true;
@@ -208,17 +208,17 @@ public class GameEngine {
         boolean result = false;
         String player = "";
         
-        for(Rail rail : rails) {
-            if(rail.isWinner()) {
+        for (Rail rail : rails) {
+            if (rail.isWinner()) {
                 result = true;
                 for(Tile tile : rail.getTiles()) {
                     tile.setBackground(Color.GREEN);
                     player = tile.getText();
                 }
-                if(player.equals("X")) {
+                if (player.equals("X")) {
                     winningPlayer = "X";
                     this.xWins++;
-                } else if(player.equals("0")) {
+                } else if (player.equals("0")) {
                     winningPlayer = "0";
                     this.oWins++;
                 }
@@ -229,27 +229,27 @@ public class GameEngine {
         return result;
     }
 
-    public int getTilesPlayed() {
+    public final int getTilesPlayed() {
         return tilesPlayed;
     }
 
-    public void incrementTilesPlayed() {
+    public final void incrementTilesPlayed() {
         this.tilesPlayed++;
     }
 
-    public String getWinningPlayer() {
+    public final String getWinningPlayer() {
         return winningPlayer;
     }
 
-    public void setWinningPlayer(String winningPlayer) {
+    public final void setWinningPlayer(final String winningPlayer) {
         this.winningPlayer = winningPlayer;
     }
 
-    public static int getDraws() {
+    public final static int getDraws() {
         return draws;
     }
 
-    public static int getoWins() {
+    public final static int getoWins() {
         return oWins;
     }
 

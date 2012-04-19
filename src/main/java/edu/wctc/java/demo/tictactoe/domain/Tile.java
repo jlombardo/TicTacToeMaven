@@ -22,7 +22,7 @@ public class Tile extends JButton {
      * only choices possible.
      */
     @Override
-    public void setText(String text) {
+    public void setText(final String text) {
         super.setText(text);
         if(text == null) {
             selected = false;
@@ -31,7 +31,7 @@ public class Tile extends JButton {
         selected = text.equals("X") || text.equals("0") ? true : false;
     }
 
-    public boolean isSelected() {
+    public final boolean isSelected() {
         return selected;
     }
 }

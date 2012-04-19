@@ -64,7 +64,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         getDrawsTotal().setText(""+ GameEngine.getDraws());
     }    
  
-   private void askStartNewGame(String playerMsg) {
+   private void askStartNewGame(final String playerMsg) {
         updateStats();
         int result = JOptionPane.showConfirmDialog(getStatusMsg(), 
                 playerMsg + NEW_GAME_MSG, "Game Over", 
@@ -85,7 +85,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     * moves. However, the helper class responds to the moves and updates the
     * UI with relevant information.
     */
-    private void processMove(Tile tile) {
+    private void processMove(final Tile tile) {
         if(tile.getText().equals(EMPTY_TILE)) {
             statusMsg.setText("Good move!");
             tile.setText("X");
@@ -107,11 +107,11 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                 return;
             }
 
-            tile = game.selectComputerMove();
-            while(tile.getText().length() > 0) {
-                tile = game.selectComputerMove();
+            Tile tile0 = game.selectComputerMove();
+            while(tile0.getText().length() > 0) {
+                tile0 = game.selectComputerMove();
             }
-            tile.setText("0");
+            tile0.setText("0");
             game.incrementTilesPlayed();
             
             if(game.checkForWin()) {
@@ -157,7 +157,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         statusMsg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.6");
+        setTitle("TicTacToe in Java v1.0.7");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
@@ -283,7 +283,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                         .addComponent(r1c2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
             .addComponent(statusMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(

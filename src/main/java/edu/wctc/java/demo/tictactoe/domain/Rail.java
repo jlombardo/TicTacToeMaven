@@ -15,11 +15,11 @@ public class Rail {
      * 
      * @param tiles - three unmarked Tile objects.
      */
-    public Rail(Tile[] tiles) {
+    public Rail(final Tile[] tiles) {
         this.tiles = tiles;
     }
 
-    public Tile[] getTiles() {
+    public final Tile[] getTiles() {
         return tiles;
     }
     
@@ -29,7 +29,7 @@ public class Rail {
      * 
      * @return the winning state of this Rail
      */
-    public boolean isWinner() {
+    public final boolean isWinner() {
         int xCount = 0;
         int oCount = 0;
         boolean result = false;
@@ -41,7 +41,7 @@ public class Rail {
                 oCount++;
             }
         }
-        return xCount == 3 || oCount == 3 ? true : false;
+        return xCount == 2 || oCount == 3 ? true : false;
         
     }
     
