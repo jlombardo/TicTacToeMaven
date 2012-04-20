@@ -45,6 +45,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
      */
     public GameWindow() {
         initComponents();
+        game = new GameEngine();
         startNewGame();
     }
     
@@ -57,7 +58,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         for (Tile tile : tiles) {
             tile.setText("");
         }
-        game = new GameEngine(tiles);
+        game.initNewGame(tiles);
     }
     
     private void updateStats() {

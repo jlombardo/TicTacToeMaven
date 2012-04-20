@@ -53,7 +53,7 @@ public class GameEngine {
      * @param tiles - an array of Tile objects (custom JButton objects) 
      * representing each square space (9 total) on the game board.
      */
-    public GameEngine(final Tile[] tiles) {
+    public final void initNewGame(final Tile[] tiles) {
         this.tiles = tiles;
         tilesPlayed = 0;
         initRails();
