@@ -4,7 +4,7 @@
 
   <groupId>edu.wctc.java.demo.tictactoe</groupId>
   <artifactId>TicTacToeMaven</artifactId>
-  <version>1.0.9</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>TicTacToeMaven</name>

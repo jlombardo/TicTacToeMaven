@@ -192,7 +192,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener, Ch
         jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.8");
+        setTitle("TicTacToe in Java v1.1.0");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
@@ -226,7 +226,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener, Ch
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(43, 43, 43)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(compWins)
