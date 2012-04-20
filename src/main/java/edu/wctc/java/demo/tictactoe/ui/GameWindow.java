@@ -1,11 +1,12 @@
 package edu.wctc.java.demo.tictactoe.ui;
 
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import edu.wctc.java.demo.tictactoe.domain.GameEngine;
 import edu.wctc.java.demo.tictactoe.domain.Tile;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  * This class is the GUI representing the game window. It uses a custome
@@ -28,7 +29,7 @@ import edu.wctc.java.demo.tictactoe.domain.Tile;
  * Only a new View would be needed.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.05
+ * @version  1.08
  */
 public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private static final String EMPTY_TILE = "";
@@ -36,6 +37,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private static final String YOU_WIN_MSG = "You Won, Game Over!";
     private static final String DRAW_MSG = "This game is a draw. No winner!";
     private static final String NEW_GAME_MSG = " Want to play a new game?";
+    private static final String ICON = "/images/question-icon.png";
     private GameEngine game;
     
     /**
@@ -52,24 +54,26 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             (Tile)r2c1,(Tile)r2c2,(Tile)r2c3,
             (Tile)r3c1,(Tile)r3c2,(Tile)r3c3
         };  
-        for(Tile tile : tiles) {
+        for (Tile tile : tiles) {
             tile.setText("");
         }
         game = new GameEngine(tiles);
     }
     
     private void updateStats() {
-        getCompWins().setText(""+ GameEngine.getoWins());
-        getYouWins().setText(""+ GameEngine.getxWins());
-        getDrawsTotal().setText(""+ GameEngine.getDraws());
+        getCompWins().setText(""+ game.getoWins());
+        getYouWins().setText(""+ game.getxWins());
+        getDrawsTotal().setText(""+ game.getDraws());
     }    
  
    private void askStartNewGame(final String playerMsg) {
         updateStats();
+        ImageIcon icon = createImageIcon(ICON);
         int result = JOptionPane.showConfirmDialog(getStatusMsg(), 
                 playerMsg + NEW_GAME_MSG, "Game Over", 
-                JOptionPane.OK_CANCEL_OPTION);
-        if(result == JOptionPane.OK_OPTION) {
+                JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, icon);
+        if (result == JOptionPane.OK_OPTION) {
             for(JButton tile : game.getTiles()) {
                 tile.setBackground(Color.WHITE);
                 tile.setText("");
@@ -79,6 +83,21 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             System.exit(0);
         }
     }
+   
+   /**
+     * Creates an ImageIcon if the path is valid.
+     * @param String - resource path
+     * @param String - description of the file
+     */
+    private ImageIcon createImageIcon(String path) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
     
    /*
     * A helper method that delegates to the GameEngine to actually process the
@@ -86,19 +105,19 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     * UI with relevant information.
     */
     private void processMove(final Tile tile) {
-        if(tile.getText().equals(EMPTY_TILE)) {
+        if (tile.getText().equals(EMPTY_TILE)) {
             statusMsg.setText("Good move!");
             tile.setText("X");
             game.incrementTilesPlayed();
             
-            if(game.checkForDraw()) {
+            if (game.checkForDraw()) {
                 statusMsg.setText(DRAW_MSG);
                 askStartNewGame(DRAW_MSG);
                 return;
             }
 
-            if(game.checkForWin()) {
-                if(game.getWinningPlayer().equals("X")) {
+            if (game.checkForWin()) {
+                if (game.getWinningPlayer().equals("X")) {
                     statusMsg.setText(YOU_WIN_MSG);
                 } else {
                     statusMsg.setText(COMP_WIN_MSG);
@@ -108,14 +127,14 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             }
 
             Tile tile0 = game.selectComputerMove();
-            while(tile0.getText().length() > 0) {
+            while (tile0.getText().length() > 0) {
                 tile0 = game.selectComputerMove();
             }
             tile0.setText("0");
             game.incrementTilesPlayed();
             
-            if(game.checkForWin()) {
-                if(game.getWinningPlayer().equals("X")) {
+            if (game.checkForWin()) {
+                if (game.getWinningPlayer().equals("X")) {
                     statusMsg.setText(YOU_WIN_MSG);
                 } else {
                     statusMsg.setText(COMP_WIN_MSG);
@@ -157,7 +176,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         statusMsg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.7");
+        setTitle("TicTacToe in Java v1.0.8");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));

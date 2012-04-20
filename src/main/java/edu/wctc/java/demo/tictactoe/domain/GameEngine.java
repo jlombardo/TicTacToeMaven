@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.07
+ * @version  1.08
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -34,9 +34,9 @@ public class GameEngine {
     private static final int R3C2 = 7;
     private static final int R3C3 = 8;
     
-    private static int xWins = 0;
-    private static int oWins = 0;
-    private static int draws = 0;
+    private int xWins = 0;
+    private int oWins = 0;
+    private int draws = 0;
     
     private Random rand = new Random(System.nanoTime());
     private Tile[] tiles;
@@ -204,7 +204,7 @@ public class GameEngine {
     }
     
     // Be sure to call this only after checkForDraw
-    public boolean checkForWin() {
+    public final boolean checkForWin() {
         boolean result = false;
         String player = "";
         
@@ -245,19 +245,19 @@ public class GameEngine {
         this.winningPlayer = winningPlayer;
     }
 
-    public final static int getDraws() {
+    public final int getDraws() {
         return draws;
     }
 
-    public final static int getoWins() {
+    public final int getoWins() {
         return oWins;
     }
 
-    public static int getxWins() {
+    public final int getxWins() {
         return xWins;
     }
 
-    public Tile[] getTiles() {
+    public final Tile[] getTiles() {
         return tiles;
     }
 
