@@ -1,4 +1,4 @@
-This is a Java/Mavenized version of the popular classic game Tic-Tac-Toe. It provides a nice, modular design plus some simple AI to deliver a game where any human player ("X") can challenge the computer ("0") to a game.
+This is a Java/Mavenized version of the popular classic game Tic-Tac-Toe. It provides a nice, modular design plus some good AI to deliver a game where any human player ("X") can challenge the computer ("0") to a game. But be warned, the computer is almost impossible to beat. Give it a try and send me an email if you can beat it.
 
 Currently there is no way to change player ID or to use the game to challenge another human player.
 
