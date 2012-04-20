@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.08
+ * @version  1.09
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -43,6 +43,7 @@ public class GameEngine {
     private int tilesPlayed = 0;
     private Rail[] rails;
     private String winningPlayer = "";
+    private int smarts = 100;
     
     /**
      * Constructs a GameEngine with nine (9) supplied Tile objects that are
@@ -133,37 +134,39 @@ public class GameEngine {
         }
         
         // If none found, try to block "X"
-         for (Rail rail : rails) {
-            for (Tile t : rail.getTiles()) {
-                if (t.getText().equals("X")) count++;
-            }
-            if (count == 2) {
+        if(smarts >= 50) {
+            for (Rail rail : rails) {
                 for (Tile t : rail.getTiles()) {
-                    if (t.getText().equals("")) {
-                        tileName = t.getName();
-                        return t;
+                    if (t.getText().equals("X")) count++;
+                }
+                if (count == 2) {
+                    for (Tile t : rail.getTiles()) {
+                        if (t.getText().equals("")) {
+                            tileName = t.getName();
+                            return t;
+                        }
                     }
                 }
+                count = 0;
             }
-            count = 0;
         }
          
         // If no blocking move, try to play the center which gives "O"
         // a statistical advantage
-        if (!tiles[R2C2].isSelected()) {
+        if (!tiles[R2C2].isSelected() && smarts == 100) {
             return tiles[R2C2];
         }
        
        
         // If center move is not available, try to find an open corner tile, 
         // which might set up an winning combination
-        if (!tiles[R1C1].isSelected()) {
+        if (!tiles[R1C1].isSelected() && smarts >= 50) {
             return tiles[R1C1];
-        } else if (!tiles[R3C3].isSelected()) {
+        } else if (!tiles[R3C3].isSelected()&& smarts >= 50) {
             return tiles[R3C3];
-        } else if (!tiles[R3C1].isSelected()) {
+        } else if (!tiles[R3C1].isSelected()&& smarts >= 50) {
             return tiles[R3C1];
-        } else if (!tiles[R1C3].isSelected()) {
+        } else if (!tiles[R1C3].isSelected()&& smarts >= 50) {
             return tiles[R1C3];
         }
         
@@ -259,6 +262,14 @@ public class GameEngine {
 
     public final Tile[] getTiles() {
         return tiles;
+    }
+
+    public final int getSmarts() {
+        return smarts;
+    }
+
+    public final void setSmarts(int smarts) {
+        this.smarts = smarts;
     }
 
 }
