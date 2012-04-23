@@ -1,11 +1,14 @@
 package edu.wctc.java.demo.tictactoe.ui;
 
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import edu.wctc.java.demo.tictactoe.domain.GameEngine;
 import edu.wctc.java.demo.tictactoe.domain.Tile;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
 
 /**
  * This class is the GUI representing the game window. It uses a custome
@@ -28,14 +31,15 @@ import edu.wctc.java.demo.tictactoe.domain.Tile;
  * Only a new View would be needed.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.05
+ * @version  1.09
  */
-public class GameWindow extends javax.swing.JFrame implements ActionListener {
+public class GameWindow extends javax.swing.JFrame implements ActionListener, ChangeListener {
     private static final String EMPTY_TILE = "";
     private static final String COMP_WIN_MSG = "Computer Wins, Game Over!";
     private static final String YOU_WIN_MSG = "You Won, Game Over!";
     private static final String DRAW_MSG = "This game is a draw. No winner!";
     private static final String NEW_GAME_MSG = " Want to play a new game?";
+    private static final String ICON = "/images/question-icon.png";
     private GameEngine game;
     
     /**
@@ -43,6 +47,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
      */
     public GameWindow() {
         initComponents();
+        game = new GameEngine();
         startNewGame();
     }
     
@@ -52,24 +57,26 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             (Tile)r2c1,(Tile)r2c2,(Tile)r2c3,
             (Tile)r3c1,(Tile)r3c2,(Tile)r3c3
         };  
-        for(Tile tile : tiles) {
+        for (Tile tile : tiles) {
             tile.setText("");
         }
-        game = new GameEngine(tiles);
+        game.initNewGame(tiles);
     }
     
     private void updateStats() {
-        getCompWins().setText(""+ GameEngine.getoWins());
-        getYouWins().setText(""+ GameEngine.getxWins());
-        getDrawsTotal().setText(""+ GameEngine.getDraws());
+        getCompWins().setText(""+ game.getoWins());
+        getYouWins().setText(""+ game.getxWins());
+        getDrawsTotal().setText(""+ game.getDraws());
     }    
  
    private void askStartNewGame(final String playerMsg) {
         updateStats();
+        ImageIcon icon = createImageIcon(ICON);
         int result = JOptionPane.showConfirmDialog(getStatusMsg(), 
                 playerMsg + NEW_GAME_MSG, "Game Over", 
-                JOptionPane.OK_CANCEL_OPTION);
-        if(result == JOptionPane.OK_OPTION) {
+                JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, icon);
+        if (result == JOptionPane.OK_OPTION) {
             for(JButton tile : game.getTiles()) {
                 tile.setBackground(Color.WHITE);
                 tile.setText("");
@@ -79,6 +86,21 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             System.exit(0);
         }
     }
+   
+   /**
+     * Creates an ImageIcon if the path is valid.
+     * @param String - resource path
+     * @param String - description of the file
+     */
+    private ImageIcon createImageIcon(String path) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
     
    /*
     * A helper method that delegates to the GameEngine to actually process the
@@ -86,19 +108,19 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     * UI with relevant information.
     */
     private void processMove(final Tile tile) {
-        if(tile.getText().equals(EMPTY_TILE)) {
+        if (tile.getText().equals(EMPTY_TILE)) {
             statusMsg.setText("Good move!");
             tile.setText("X");
             game.incrementTilesPlayed();
             
-            if(game.checkForDraw()) {
+            if (game.checkForDraw()) {
                 statusMsg.setText(DRAW_MSG);
                 askStartNewGame(DRAW_MSG);
                 return;
             }
 
-            if(game.checkForWin()) {
-                if(game.getWinningPlayer().equals("X")) {
+            if (game.checkForWin()) {
+                if (game.getWinningPlayer().equals("X")) {
                     statusMsg.setText(YOU_WIN_MSG);
                 } else {
                     statusMsg.setText(COMP_WIN_MSG);
@@ -108,14 +130,14 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             }
 
             Tile tile0 = game.selectComputerMove();
-            while(tile0.getText().length() > 0) {
+            while (tile0.getText().length() > 0) {
                 tile0 = game.selectComputerMove();
             }
             tile0.setText("0");
             game.incrementTilesPlayed();
             
-            if(game.checkForWin()) {
-                if(game.getWinningPlayer().equals("X")) {
+            if (game.checkForWin()) {
+                if (game.getWinningPlayer().equals("X")) {
                     statusMsg.setText(YOU_WIN_MSG);
                 } else {
                     statusMsg.setText(COMP_WIN_MSG);
@@ -138,6 +160,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSlider1 = new javax.swing.JSlider();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         compWins = new javax.swing.JLabel();
@@ -155,9 +178,21 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         r3c2 = new Tile();
         r3c3 = new Tile();
         statusMsg = new javax.swing.JLabel();
+        smartSlider = smartSlider = new javax.swing.JSlider(javax.swing.JSlider.VERTICAL, 0, 100, 100);
+        smartSlider.addChangeListener(this);
+        smartSlider.setMajorTickSpacing(50);
+        smartSlider.setPaintTicks(true);
+        java.util.Hashtable sliderLabels = new java.util.Hashtable();
+        sliderLabels.put(new Integer(0), new javax.swing.JLabel("Easy"));
+        sliderLabels.put(new Integer(50), new javax.swing.JLabel("Smart"));
+        sliderLabels.put(new Integer(100), new javax.swing.JLabel("Genius"));
+        smartSlider.setLabelTable(sliderLabels);
+        smartSlider.setPaintLabels(true);
+
+        jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TicTacToe in Java v1.0.7");
+        setTitle("TicTacToe in Java v1.1.0");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
@@ -191,7 +226,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(43, 43, 43)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(compWins)
@@ -203,7 +238,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(drawsTotal)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,6 +292,15 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         statusMsg.setText("Click a button to start new game");
         statusMsg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        smartSlider.setMinorTickSpacing(50);
+        smartSlider.setOrientation(javax.swing.JSlider.VERTICAL);
+        smartSlider.setPaintLabels(true);
+        smartSlider.setPaintTicks(true);
+        smartSlider.setSnapToTicks(true);
+        smartSlider.setToolTipText("Computer Smarts");
+        smartSlider.setValue(100);
+        smartSlider.addChangeListener(this);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -272,18 +316,20 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(r3c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(r2c1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(r2c2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(r2c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(r1c1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(r1c2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                        .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(r2c1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(r2c2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(r2c3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(smartSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
             .addComponent(statusMsg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -291,27 +337,32 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r1c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(r1c2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r2c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(r2c2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(r2c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r3c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(r3c2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(r3c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(r1c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(r1c2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(r1c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(r2c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(r2c2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(r2c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(r3c3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(r3c1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(r3c2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(smartSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(statusMsg)
                 .addGap(4, 4, 4))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-300)/2, (screenSize.height-321)/2, 300, 321);
+        setBounds((screenSize.width-350)/2, (screenSize.height-321)/2, 350, 321);
     }
 
     // Code for dispatching events from components to event handlers.
@@ -343,6 +394,12 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         }
         else if (evt.getSource() == r3c3) {
             GameWindow.this.r3c3ActionPerformed(evt);
+        }
+    }
+
+    public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        if (evt.getSource() == smartSlider) {
+            GameWindow.this.smartSliderStateChanged(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -391,6 +448,15 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
         processMove((Tile)r3c3);
     }//GEN-LAST:event_r3c3ActionPerformed
 
+    private void smartSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_smartSliderStateChanged
+        // TODO add your handling code here:
+        JSlider source = (JSlider)evt.getSource();
+        if (!source.getValueIsAdjusting()) {
+            int smarts = (int)source.getValue();
+            game.setSmarts(smarts);
+        }
+    }//GEN-LAST:event_smartSliderStateChanged
+
     public javax.swing.JLabel getCompWins() {
         return compWins;
     }
@@ -416,6 +482,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JButton r1c1;
     private javax.swing.JButton r1c2;
     private javax.swing.JButton r1c3;
@@ -425,6 +492,7 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JButton r3c1;
     private javax.swing.JButton r3c2;
     private javax.swing.JButton r3c3;
+    private javax.swing.JSlider smartSlider;
     private javax.swing.JLabel statusMsg;
     private javax.swing.JLabel youWins;
     // End of variables declaration//GEN-END:variables

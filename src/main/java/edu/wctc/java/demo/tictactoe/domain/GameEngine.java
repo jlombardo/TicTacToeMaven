@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.07
+ * @version  1.09
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -34,15 +34,16 @@ public class GameEngine {
     private static final int R3C2 = 7;
     private static final int R3C3 = 8;
     
-    private static int xWins = 0;
-    private static int oWins = 0;
-    private static int draws = 0;
+    private int xWins = 0;
+    private int oWins = 0;
+    private int draws = 0;
     
     private Random rand = new Random(System.nanoTime());
     private Tile[] tiles;
     private int tilesPlayed = 0;
     private Rail[] rails;
     private String winningPlayer = "";
+    private int smarts = 100;
     
     /**
      * Constructs a GameEngine with nine (9) supplied Tile objects that are
@@ -53,7 +54,7 @@ public class GameEngine {
      * @param tiles - an array of Tile objects (custom JButton objects) 
      * representing each square space (9 total) on the game board.
      */
-    public GameEngine(final Tile[] tiles) {
+    public final void initNewGame(final Tile[] tiles) {
         this.tiles = tiles;
         tilesPlayed = 0;
         initRails();
@@ -133,37 +134,39 @@ public class GameEngine {
         }
         
         // If none found, try to block "X"
-         for (Rail rail : rails) {
-            for (Tile t : rail.getTiles()) {
-                if (t.getText().equals("X")) count++;
-            }
-            if (count == 2) {
+        if(smarts >= 50) {
+            for (Rail rail : rails) {
                 for (Tile t : rail.getTiles()) {
-                    if (t.getText().equals("")) {
-                        tileName = t.getName();
-                        return t;
+                    if (t.getText().equals("X")) count++;
+                }
+                if (count == 2) {
+                    for (Tile t : rail.getTiles()) {
+                        if (t.getText().equals("")) {
+                            tileName = t.getName();
+                            return t;
+                        }
                     }
                 }
+                count = 0;
             }
-            count = 0;
         }
          
         // If no blocking move, try to play the center which gives "O"
         // a statistical advantage
-        if (!tiles[R2C2].isSelected()) {
+        if (!tiles[R2C2].isSelected() && smarts == 100) {
             return tiles[R2C2];
         }
        
        
         // If center move is not available, try to find an open corner tile, 
         // which might set up an winning combination
-        if (!tiles[R1C1].isSelected()) {
+        if (!tiles[R1C1].isSelected() && smarts >= 50) {
             return tiles[R1C1];
-        } else if (!tiles[R3C3].isSelected()) {
+        } else if (!tiles[R3C3].isSelected()&& smarts >= 50) {
             return tiles[R3C3];
-        } else if (!tiles[R3C1].isSelected()) {
+        } else if (!tiles[R3C1].isSelected()&& smarts >= 50) {
             return tiles[R3C1];
-        } else if (!tiles[R1C3].isSelected()) {
+        } else if (!tiles[R1C3].isSelected()&& smarts >= 50) {
             return tiles[R1C3];
         }
         
@@ -204,7 +207,7 @@ public class GameEngine {
     }
     
     // Be sure to call this only after checkForDraw
-    public boolean checkForWin() {
+    public final boolean checkForWin() {
         boolean result = false;
         String player = "";
         
@@ -245,20 +248,28 @@ public class GameEngine {
         this.winningPlayer = winningPlayer;
     }
 
-    public final static int getDraws() {
+    public final int getDraws() {
         return draws;
     }
 
-    public final static int getoWins() {
+    public final int getoWins() {
         return oWins;
     }
 
-    public static int getxWins() {
+    public final int getxWins() {
         return xWins;
     }
 
-    public Tile[] getTiles() {
+    public final Tile[] getTiles() {
         return tiles;
+    }
+
+    public final int getSmarts() {
+        return smarts;
+    }
+
+    public final void setSmarts(int smarts) {
+        this.smarts = smarts;
     }
 
 }
