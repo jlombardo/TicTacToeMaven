@@ -150,24 +150,26 @@ public class GameEngine {
                 count = 0;
             }
         }
+       
+        // If no blocking move, try to find an open corner tile, 
+        // which might set up an winning combination
+        if(smarts >= 50) {
+            if (tiles[R1C1].getText().equals("X") && !tiles[R3C3].isSelected()) {
+                return tiles[R3C3];
+            } else if (tiles[R3C3].getText().equals("X") && !tiles[R1C1].isSelected()) {
+                 return tiles[R1C1];
+                 
+            } else if (tiles[R1C3].getText().equals("X") && !tiles[R3C1].isSelected()) {
+                 return tiles[R3C1];
+            } else if (tiles[R3C1].getText().equals("X") && !tiles[R1C3].isSelected()) {
+                 return tiles[R1C3];
+            }
+        }
          
-        // If no blocking move, try to play the center which gives "O"
+        // Else, try to play the center which gives "O"
         // a statistical advantage
         if (!tiles[R2C2].isSelected() && smarts == 100) {
             return tiles[R2C2];
-        }
-       
-       
-        // If center move is not available, try to find an open corner tile, 
-        // which might set up an winning combination
-        if (!tiles[R1C1].isSelected() && smarts >= 50) {
-            return tiles[R1C1];
-        } else if (!tiles[R3C3].isSelected()&& smarts >= 50) {
-            return tiles[R3C3];
-        } else if (!tiles[R3C1].isSelected()&& smarts >= 50) {
-            return tiles[R3C1];
-        } else if (!tiles[R1C3].isSelected()&& smarts >= 50) {
-            return tiles[R1C3];
         }
         
         // If none found just pick an empty tile at random
