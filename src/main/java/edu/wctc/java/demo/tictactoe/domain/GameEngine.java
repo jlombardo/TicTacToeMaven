@@ -13,7 +13,7 @@ import java.util.Random;
  * support a computer opponent.
  * 
  * @author   Jim Lombardo, Lead Java Instructor, jlombardo@wctc.edu
- * @version  1.09
+ * @version  1.1.0
  */
 public class GameEngine {
     private static final int ROW1 = 0;
@@ -154,8 +154,34 @@ public class GameEngine {
         // If no blocking move, try to find an open corner tile, 
         // which might set up an winning combination
         if(smarts >= 50) {
-            if (tiles[R1C1].getText().equals("X") && !tiles[R3C3].isSelected()) {
+            // If opponent marks a corner, computer must try to mark center
+            if ((tiles[R1C1].getText().equals("X") ||
+                tiles[R1C3].getText().equals("X") ||
+                tiles[R3C1].getText().equals("X") ||
+                tiles[R3C3].getText().equals("X")) && 
+               !tiles[R2C2].isSelected()) {
+                
+                return tiles[R2C2];
+            
+            // If opponent marks center, computer should pick a corner
+            } else if (tiles[R2C2].getText().equals("X") &&
+                      !tiles[R1C1].isSelected()) {
+                
+                return tiles[R1C1];
+            } else if (tiles[R2C2].getText().equals("X") &&
+                      !tiles[R1C3].isSelected()) {
+                
+                return tiles[R1C3];
+            } else if (tiles[R2C2].getText().equals("X") &&
+                      !tiles[R3C1].isSelected()) {
+                
+                return tiles[R3C1];
+            } else if (tiles[R2C2].getText().equals("X") &&
+                      !tiles[R3C3].isSelected()) {
+                
                 return tiles[R3C3];
+                
+                
             } else if (tiles[R3C3].getText().equals("X") && !tiles[R1C1].isSelected()) {
                  return tiles[R1C1];
                  
