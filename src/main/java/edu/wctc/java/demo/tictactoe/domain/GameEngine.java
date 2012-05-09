@@ -153,7 +153,7 @@ public class GameEngine {
        
         // If no blocking move, try to find an open corner tile, 
         // which might set up an winning combination
-        if(smarts >= 50) {
+        if(smarts > 50) {
             // If opponent marks a corner, computer must try to mark center
             if ((tiles[R1C1].getText().equals("X") ||
                 tiles[R1C3].getText().equals("X") ||
@@ -194,7 +194,7 @@ public class GameEngine {
          
         // Else, try to play the center which gives "O"
         // a statistical advantage
-        if (!tiles[R2C2].isSelected() && smarts == 100) {
+        if (!tiles[R2C2].isSelected() && smarts >= 50) {
             return tiles[R2C2];
         }
         
