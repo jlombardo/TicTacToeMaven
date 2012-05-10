@@ -153,7 +153,7 @@ public class GameEngine {
        
         // If no blocking move, try to find an open corner tile, 
         // which might set up an winning combination
-        if(smarts > 50) {
+        if(smarts > 50) {            
             // If opponent marks a corner, computer must try to mark center
             if ((tiles[R1C1].getText().equals("X") ||
                 tiles[R1C3].getText().equals("X") ||
@@ -163,32 +163,15 @@ public class GameEngine {
                 
                 return tiles[R2C2];
             
-            // If opponent marks center, computer should pick a corner
-            } else if (tiles[R2C2].getText().equals("X") &&
-                      !tiles[R1C1].isSelected()) {
-                
-                return tiles[R1C1];
-            } else if (tiles[R2C2].getText().equals("X") &&
-                      !tiles[R1C3].isSelected()) {
-                
-                return tiles[R1C3];
-            } else if (tiles[R2C2].getText().equals("X") &&
-                      !tiles[R3C1].isSelected()) {
-                
-                return tiles[R3C1];
-            } else if (tiles[R2C2].getText().equals("X") &&
-                      !tiles[R3C3].isSelected()) {
-                
-                return tiles[R3C3];
-                
-                
-            } else if (tiles[R3C3].getText().equals("X") && !tiles[R1C1].isSelected()) {
-                 return tiles[R1C1];
-                 
-            } else if (tiles[R1C3].getText().equals("X") && !tiles[R3C1].isSelected()) {
-                 return tiles[R3C1];
-            } else if (tiles[R3C1].getText().equals("X") && !tiles[R1C3].isSelected()) {
-                 return tiles[R1C3];
+            // If opponent marks a corner, computer should pick a corner
+            } else if (!tiles[R1C2].isSelected()) {            
+                return tiles[R1C2];
+            } else if (!tiles[R3C2].isSelected()) {            
+                return tiles[R3C2];
+            } else if (!tiles[R2C1].isSelected()) {             
+                return tiles[R2C1];
+            } else if (!tiles[R2C3].isSelected()) {              
+                return tiles[R2C3];     
             }
         }
          
