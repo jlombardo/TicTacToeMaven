@@ -252,39 +252,39 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener, Ch
         );
 
         r1c1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r1c1.setName("r1c1");
+        r1c1.setName("r1c1"); // NOI18N
         r1c1.addActionListener(this);
 
         r1c2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r1c2.setName("r1c2");
+        r1c2.setName("r1c2"); // NOI18N
         r1c2.addActionListener(this);
 
         r1c3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r1c3.setName("r1c3");
+        r1c3.setName("r1c3"); // NOI18N
         r1c3.addActionListener(this);
 
         r2c1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r2c1.setName("r2c1");
+        r2c1.setName("r2c1"); // NOI18N
         r2c1.addActionListener(this);
 
         r2c2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r2c2.setName("r2c2");
+        r2c2.setName("r2c2"); // NOI18N
         r2c2.addActionListener(this);
 
         r2c3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r2c3.setName("r2c3");
+        r2c3.setName("r2c3"); // NOI18N
         r2c3.addActionListener(this);
 
         r3c1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r3c1.setName("r3c1");
+        r3c1.setName("r3c1"); // NOI18N
         r3c1.addActionListener(this);
 
         r3c2.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r3c2.setName("r3c2");
+        r3c2.setName("r3c2"); // NOI18N
         r3c2.addActionListener(this);
 
         r3c3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        r3c3.setName("r3c3");
+        r3c3.setName("r3c3"); // NOI18N
         r3c3.addActionListener(this);
 
         statusMsg.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -358,11 +358,11 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener, Ch
                     .addComponent(smartSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(statusMsg)
-                .addGap(4, 4, 4))
+                .addContainerGap())
         );
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-350)/2, (screenSize.height-321)/2, 350, 321);
+        setSize(new java.awt.Dimension(350, 349));
+        setLocationRelativeTo(null);
     }
 
     // Code for dispatching events from components to event handlers.
