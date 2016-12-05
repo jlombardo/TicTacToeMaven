@@ -14,7 +14,7 @@ public class TicTacToe {
     private TicTacToe() {}
 
     /**
-     * @param args the command line arguments
+     * @param args the command line arguments not used
      */
     public static void main(final String[] args) {
         
