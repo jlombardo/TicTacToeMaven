@@ -19,15 +19,16 @@ public class TicTacToe {
     public static void main(final String[] args) {
         
         try {
-            // Normally we would set L&F to system, but on Mac the L&F
-            // doesn't work right ... so just use Nimbus
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+            // Normally we would set L&F to the OS system's
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            
+//          But if the L&F doesn't work rightjust use Nimbus
+//            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
             
          } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(GameWindow.class.getName())
