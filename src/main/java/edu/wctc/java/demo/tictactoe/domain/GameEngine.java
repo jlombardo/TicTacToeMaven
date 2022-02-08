@@ -60,7 +60,17 @@ public class GameEngine {
         initRails();
     }
     
-    // Determines tile combinations that form winning rails.
+    /*
+       Determines tile combinations that form winning rails:
+    
+       * * *   - - -   - - -   * - -  - * -  - - *
+       - - -   * * *   - - -   * - -  - * -  - - *
+       - - -   - - -   * * *   * - -  - * -  - - *
+    
+       * - -   - - *
+       - * -   - * -
+       - - *   * - -
+    */
     private final void initRails() {
         rails = new Rail[8];
         rails[ROW1] = new Rail(
