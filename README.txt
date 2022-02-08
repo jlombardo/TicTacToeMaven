@@ -1,4 +1,4 @@
-This is a Java/Mavenized version of the popular classic game Tic-Tac-Toe. It features a new, adjustable AI for the computer that let's you choose whether your (computer) opponent will be easy, smart or genius. At genius level you won't be able to beat the computer, but it can beat you if you're not careful.
+This is a Java/Mavenized version of the popular classic game Tic-Tac-Toe. It features a new, adjustable AI for the computer that let's you choose whether your (computer) opponent will be easy, smart or genius. At genius level you won't be able to beat the computer unless you start by selecting the center cell, which gives you a statistical advantage, but it can still beat you if you're not careful.
 
 Any human player ("X") can challenge the computer ("0") to a game. Currently there is no way to change player ID or to use the game to challenge another human player.
 
