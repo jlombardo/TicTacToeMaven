@@ -39,7 +39,7 @@ public class GameEngine {
     private int draws = 0;
     
     private Random rand = new Random(System.nanoTime());
-    private Tile[] tiles;
+    private Tile[] tiles; // array of JButtons
     private int tilesPlayed = 0;
     private Rail[] rails;
     private String winningPlayer = "";
@@ -116,7 +116,7 @@ public class GameEngine {
     }
     
     /*
-     * Selects a computer move using a simple AI routine. First tries to
+     * Selects a computer ("0") move using a simple AI routine. First tries to
      * find a winning move, then if none available, tries to block a winning
      * opportunity by the player "X", and if that is not available, just
      * finds a random, empty tile.
@@ -127,7 +127,7 @@ public class GameEngine {
         String tileName = null;
         boolean continueLoop = true;
         
-        // First try to find a winning move
+        // First see if "0" has a potential winning move
         for (Rail rail : rails) {
             for (Tile t : rail.getTiles()) {
                 if (t.getText().equals("0")) count++;
@@ -135,7 +135,8 @@ public class GameEngine {
             if (count == 2) {
                 for (Tile t : rail.getTiles()) {
                     if (t.getText().equals("")) {
-                        tileName = t.getName();
+                        // this will be the tile that could produce a win
+                        tileName = t.getName(); // JButton name
                         return t;
                     }
                 }
@@ -143,8 +144,9 @@ public class GameEngine {
             count = 0;   
         }
         
-        // If none found, try to block "X"
+        // If none found, try to block "X" but only for tougher AI settings
         if(smarts >= 50) {
+            count = 0;
             for (Rail rail : rails) {
                 for (Tile t : rail.getTiles()) {
                     if (t.getText().equals("X")) count++;
@@ -152,8 +154,8 @@ public class GameEngine {
                 if (count == 2) {
                     for (Tile t : rail.getTiles()) {
                         if (t.getText().equals("")) {
-                            tileName = t.getName();
-                            return t;
+                            tileName = t.getName(); // JButton name
+                            return t; // this will be the tile to block with "0"
                         }
                     }
                 }
