@@ -7,7 +7,7 @@ import javax.swing.UIManager;
  * The startup class for a classic Tic-Tac-Toe game.
  *
  * @author   Jim Lombardo
- * @version  1.08
+ * @version  1.09
  */
 public class TicTacToe {
     
