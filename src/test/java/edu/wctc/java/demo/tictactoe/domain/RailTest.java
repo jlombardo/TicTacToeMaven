@@ -101,6 +101,40 @@ public class RailTest {
     }
 
     /**
+     * A rail where all three tiles are empty should not be a winner.
+     */
+    @Test
+    public void railShouldNotBeWinnerIfAllTilesEmpty() {
+        Tile[] tiles = new Tile[3];
+        tiles[0] = new Tile();
+        tiles[1] = new Tile();
+        tiles[2] = new Tile();
+        Rail rail = new Rail(tiles);
+
+        assertFalse(rail.isWinner());
+    }
+
+    /**
+     * A rail with mixed "X" and "0" marks should not be a winner.
+     */
+    @Test
+    public void railShouldNotBeWinnerWithMixedMarks() {
+        Tile[] tiles = new Tile[3];
+        Tile tile = new Tile();
+        tile.setText("X");
+        tiles[0] = tile;
+        tile = new Tile();
+        tile.setText("0");
+        tiles[1] = tile;
+        tile = new Tile();
+        tile.setText("X");
+        tiles[2] = tile;
+        Rail rail = new Rail(tiles);
+
+        assertFalse(rail.isWinner());
+    }
+
+    /**
      * A rail containing less than 3 tiles marked "X"
      * should not be a winner.     */
     @Test
