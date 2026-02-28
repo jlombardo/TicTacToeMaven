@@ -130,8 +130,9 @@ public class GameWindow extends javax.swing.JFrame implements ActionListener, Ch
             }
 
             Tile tile0 = game.selectComputerMove();
-            while (tile0.getText().length() > 0) {
-                tile0 = game.selectComputerMove();
+            if (tile0 == null || tile0.isSelected()) {
+                // No valid move available (should not happen mid-game)
+                return;
             }
             tile0.setText("0");
             game.incrementTilesPlayed();

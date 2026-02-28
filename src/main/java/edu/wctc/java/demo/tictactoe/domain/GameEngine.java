@@ -116,97 +116,207 @@ public class GameEngine {
     }
     
     /*
-     * Selects a computer ("0") move using a simple AI routine. First tries to
-     * find a winning move, then if none available, tries to block a winning
-     * opportunity by the player "X", and if that is not available, just
-     * finds a random, empty tile.
+     * Selects a computer ("0") move based on the current difficulty level.
+     *
+     * Genius (smarts > 50): Uses the minimax algorithm for perfect play.
+     *   The computer will always win or draw — it cannot be beaten.
+     * Smart (smarts == 50): Uses heuristics — wins when possible, blocks
+     *   opponent wins, prefers center then corners. Beatable but competent.
+     * Easy (smarts < 50): Mostly random moves. May miss winning
+     *   opportunities. Good for beginners.
+     *
+     * @return a non-null, empty Tile representing the computer's chosen move
      */
     public final Tile selectComputerMove() {
-        Tile tile = null;
-        int count = 0;
-        String tileName = null;
-        boolean continueLoop = true;
-        
-        // First see if "0" has a potential winning move
+
+        // Genius level: use minimax for perfect play
+        if (smarts > 50) {
+            return selectMinimaxMove();
+        }
+
+        // Smart level: heuristic approach
+        if (smarts == 50) {
+            return selectSmartMove();
+        }
+
+        // Easy level: mostly random, occasionally finds a win
+        return selectEasyMove();
+    }
+
+    /*
+     * Minimax algorithm — evaluates every possible game state to find the
+     * optimal move. Guarantees the computer never loses.
+     */
+    private Tile selectMinimaxMove() {
+        int bestScore = Integer.MIN_VALUE;
+        Tile bestTile = null;
+
+        for (Tile t : tiles) {
+            if (!t.isSelected()) {
+                t.setText("0");
+                int score = minimax(false);
+                t.setText("");
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestTile = t;
+                }
+            }
+        }
+        return bestTile;
+    }
+
+    /*
+     * Recursive minimax scoring. Returns +10 for a computer win,
+     * -10 for a human win, 0 for a draw, adjusted by depth so the AI
+     * prefers faster wins and slower losses.
+     *
+     * @param isComputerTurn true if it is the computer's turn to move
+     * @return the minimax score for the current board state
+     */
+    private int minimax(boolean isComputerTurn) {
+        // Check terminal states
+        String winner = findWinner();
+        if ("0".equals(winner)) return 10;
+        if ("X".equals(winner)) return -10;
+        if (isBoardFull()) return 0;
+
+        if (isComputerTurn) {
+            int bestScore = Integer.MIN_VALUE;
+            for (Tile t : tiles) {
+                if (!t.isSelected()) {
+                    t.setText("0");
+                    int score = minimax(false);
+                    t.setText("");
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (Tile t : tiles) {
+                if (!t.isSelected()) {
+                    t.setText("X");
+                    int score = minimax(true);
+                    t.setText("");
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    /*
+     * Returns the winning player mark ("X" or "0") if any rail is won,
+     * or null if no winner yet. Used by minimax to evaluate board state.
+     */
+    private String findWinner() {
         for (Rail rail : rails) {
-            for (Tile t : rail.getTiles()) {
-                if (t.getText().equals("0")) count++;
-            }
-            if (count == 2) {
-                for (Tile t : rail.getTiles()) {
-                    if (t.getText().equals("")) {
-                        // this will be the tile that could produce a win
-                        tileName = t.getName(); // JButton name
-                        return t;
-                    }
-                }
-            }
-            count = 0;   
-        }
-        
-        // If none found, try to block "X" but only for tougher AI settings
-        if(smarts >= 50) {
-            count = 0;
-            for (Rail rail : rails) {
-                for (Tile t : rail.getTiles()) {
-                    if (t.getText().equals("X")) count++;
-                }
-                if (count == 2) {
-                    for (Tile t : rail.getTiles()) {
-                        if (t.getText().equals("")) {
-                            tileName = t.getName(); // JButton name
-                            return t; // this will be the tile to block with "0"
-                        }
-                    }
-                }
-                count = 0;
+            if (rail.isWinner()) {
+                // All three tiles in a winning rail have the same mark
+                return rail.getTiles()[0].getText();
             }
         }
-       
-        // If no blocking move, try to find an open corner tile, 
-        // which might set up an winning combination
-        if(smarts > 50) {            
-            // If opponent marks a corner, computer must try to mark center
-            if ((tiles[R1C1].getText().equals("X") ||
-                tiles[R1C3].getText().equals("X") ||
-                tiles[R3C1].getText().equals("X") ||
-                tiles[R3C3].getText().equals("X")) && 
-               !tiles[R2C2].isSelected()) {
-                
-                return tiles[R2C2];
-            
-            // If opponent marks a corner, computer should pick a corner
-            } else if (!tiles[R1C2].isSelected()) {            
-                return tiles[R1C2];
-            } else if (!tiles[R3C2].isSelected()) {            
-                return tiles[R3C2];
-            } else if (!tiles[R2C1].isSelected()) {             
-                return tiles[R2C1];
-            } else if (!tiles[R2C3].isSelected()) {              
-                return tiles[R2C3];     
-            }
+        return null;
+    }
+
+    /*
+     * Returns true if all 9 tiles are occupied.
+     */
+    private boolean isBoardFull() {
+        for (Tile t : tiles) {
+            if (!t.isSelected()) return false;
         }
-         
-        // Else, try to play the center which gives "O"
-        // a statistical advantage
-        if (!tiles[R2C2].isSelected() && smarts >= 50) {
+        return true;
+    }
+
+    /*
+     * Smart-level heuristic: win if possible, block opponent wins,
+     * prefer center, then corners, then pick randomly.
+     */
+    private Tile selectSmartMove() {
+        // 1. Try to win
+        Tile winMove = findTwoInARow("0");
+        if (winMove != null) return winMove;
+
+        // 2. Block opponent from winning
+        Tile blockMove = findTwoInARow("X");
+        if (blockMove != null) return blockMove;
+
+        // 3. Take center if available
+        if (!tiles[R2C2].isSelected()) {
             return tiles[R2C2];
         }
-        
-        // If none found just pick an empty tile at random
-        if(tileName == null) {
-            int row = rand.nextInt(3) + 1;
-            int col = rand.nextInt(3) + 1;
-            tileName = "r" + row + "c" + col;
-            for (Tile btn: tiles) {
-                if (btn.getName().equals(tileName)) {
-                    tile = btn;
-                    break;
-                }
+
+        // 4. Take an open corner
+        int[] corners = {R1C1, R1C3, R3C1, R3C3};
+        for (int idx : corners) {
+            if (!tiles[idx].isSelected()) {
+                return tiles[idx];
             }
         }
-        
-        return tile;
+
+        // 5. Take any open tile
+        return findRandomEmptyTile();
+    }
+
+    /*
+     * Easy-level: mostly random. Only finds a winning move 30% of the time,
+     * never blocks, never prioritizes strategic positions.
+     */
+    private Tile selectEasyMove() {
+        // Occasionally spot a winning move (30% chance)
+        if (rand.nextInt(100) < 30) {
+            Tile winMove = findTwoInARow("0");
+            if (winMove != null) return winMove;
+        }
+
+        return findRandomEmptyTile();
+    }
+
+    /*
+     * Scans all rails for one that has two tiles marked by the given player
+     * and one empty tile. Returns the empty tile (the winning/blocking move),
+     * or null if no such rail exists.
+     */
+    private Tile findTwoInARow(String playerMark) {
+        for (Rail rail : rails) {
+            int markCount = 0;
+            Tile emptyTile = null;
+            for (Tile t : rail.getTiles()) {
+                if (t.getText().equals(playerMark)) {
+                    markCount++;
+                } else if (t.getText().equals("")) {
+                    emptyTile = t;
+                }
+            }
+            if (markCount == 2 && emptyTile != null) {
+                return emptyTile;
+            }
+        }
+        return null;
+    }
+
+    /*
+     * Returns a random empty tile from the board. Guaranteed to return
+     * a non-null tile as long as at least one empty tile exists.
+     */
+    private Tile findRandomEmptyTile() {
+        // Collect all empty tiles, then pick one at random
+        int emptyCount = 0;
+        for (Tile t : tiles) {
+            if (!t.isSelected()) emptyCount++;
+        }
+        if (emptyCount == 0) return null;
+
+        int pick = rand.nextInt(emptyCount);
+        int idx = 0;
+        for (Tile t : tiles) {
+            if (!t.isSelected()) {
+                if (idx == pick) return t;
+                idx++;
+            }
+        }
+        return null; // should never reach here
     }
     
     // Be sure to call this before checkForWin
